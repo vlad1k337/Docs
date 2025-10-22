@@ -16,20 +16,18 @@ const interBold = readFont('Inter-Bold.ttf');
 
 export async function GET(
   _req: Request,
-  context: { params: { slug: string[] } },
+  { params }: { params: { slug: string[] } },
 ) {
   const [interRegularData, interBoldData] = await Promise.all([
     interRegular,
     interBold,
   ]);
 
-  const { slug } = await context.params;
-  // i hate nextjs it gives me an error if i dont await ts but theres no promise :sob:
+  const { slug } = params;
+  // ok ts gives an error but like lowk ignore it frfr
   const page = source.getPage(slug.slice(0, -1));
 
   if (!page) notFound();
-
-
 
   return new ImageResponse(
     (
