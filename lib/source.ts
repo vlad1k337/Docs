@@ -14,6 +14,6 @@ export function getPageImage(page: InferPageType<typeof source>) {
   const segments = [...page.slugs, 'image.png'];
   return {
     segments,
-    url: `/og/docs/${segments.join('/')}`,
+    url: `https://pedropathing.com/og/docs/${segments.join('/')}`,
   };
 }
