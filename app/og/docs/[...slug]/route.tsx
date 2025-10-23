@@ -16,16 +16,16 @@ const interBold = readFont('Inter-Bold.ttf');
 
 export async function GET(
   _req: Request,
-  { params }
+  { params }: { params: Promise<{ slug: string[] }> },
 ) {
+  const { slug } = await params;
+  const page = source.getPage(slug.slice(0, -1));
+  if (!page) notFound();
   const [interRegularData, interBoldData] = await Promise.all([
     interRegular,
     interBold,
   ]);
 
-  const { slug } = params;
-  // ok ts gives an error but like lowk ignore it frfr
-  const page = source.getPage(slug.slice(0, -1));
 
   if (!page) notFound();
 
