@@ -25,12 +25,13 @@ Otherwise, join the [Pedro Pathing Discord](https://discord.gg/2GfC4qBP5s) and a
         Check whether: 
         - Your encoder's `HardwareMapName` is incorrect or if a parallel & perpendicular odometry pods' names are swapped (will result in robot rotating and translating if swapped).
         - Your encoders directions are reversed.
-        - Your IMU orientations (`LogoFacingDirection`, `UsbFacingDirection`) are incorrect.
+        - Your IMU orientations (`LogoFacingDirection`, `UsbFacingDirection`) are incorrect (only for Three Wheel IMU).
         - Your odometry pod offests are inaccurate
     </Accordion>
     <Accordion title="Robot Turns 180 and Oscillates During Heading Tuner">
         This behavior is due to incorrect motor hardwareMap associations. 
         Usually, this means that the front motors need to be swapped with the rear motors.
+        Or that your odometry offsets offsets have the wrong sign.
         Try testing that the motors are correctly associated with their hardwareMap names by running the Tuning OpMode and navigating `Localization > Motor Directions` to test.
         It may require you to swap hardwareMap names or the ports in which motors are plugged into.
     </Accordion>
@@ -42,24 +43,25 @@ Otherwise, join the [Pedro Pathing Discord](https://discord.gg/2GfC4qBP5s) and a
         Check your `brakingStrength` in `PathConstraints` and try decreasing it slightly. This will make the braking smoother and reduce the
         oscillations.
     </Accordion>
+
     <Accordion title="Robot Never Stops during ForwardVelocityTest or StrafeVelocityTest">
-        **Check if:** 
-        - Your localization is inaccurate. Run `LocalizationTest` and check: 
+        - This usually happens when your localization is inaccurate, causing the robot to think that it's driving in the opposite direction that it is actually moving in.
+        - Run `LocalizationTest` and check: 
             - when you move the robot forward, does the x-value increase?
             - when you move the robot to the left, does the y-value increase?
             - is the reported heading accurate?
-        If not, head over back to the localization section and double check your steps. You most likely need to reverse one or more of your encoders.
+        - If not, head over back to the localization section and double check your steps. You most likely need to reverse one or more of your encoders.
         Ensure that your localization is fully accurate before running automatic tuners and tuning PIDFs. 
     </Accordion>
 
-    <Accordion title="Robot Moves in the Wrong Direction during a Tuning Test">
+    <Accordion title="Robot Moves in the Wrong Direction during a Tuning Program">
         **Check if:** 
         - Your localization is inaccurate. Run `LocalizationTest` and check: 
             - when you move the robot forward, does the x-value increase?
             - when you move the robot to the left, does the y-value increase?
             - is the reported heading accurate?
-        If not, head over back to the localization section and double check your steps. You most likely need to reverse one or more of your encoders.
-        Ensure that your localization is fully accurate before tuning your PIDFs and running automatic tuners. 
+        If not, head over back to the localization section and double check your steps. 
+        Ensure that your localization is fully accurate before running automatic tuners and tuning your PIDFs. 
         - Your motor directions are reversed. 
         - Your motor configurations are incorrect.
     </Accordion>
@@ -69,6 +71,7 @@ Otherwise, join the [Pedro Pathing Discord](https://discord.gg/2GfC4qBP5s) and a
         However, if you push/turn the robot and it still doesn't move, check whether your P value in the PIDF is too low. Increasing it may give more power for your robot to correct back to its original position. 
     </Accordion>
     <Accordion title="Cannot See the Constants in Panels">
-        If the Tuning class dropdown in the Panels Configurables is empty, double check that you have selected an OpMode in the Tuning OpMode using the gamepad before reloading the Panels website.
+        If the Tuning class dropdown in the Panels Configurables is empty, double check that you have selected an OpMode in the Tuning OpMode using the gamepad before reloading the Panels website. The Panels website is accessible at the ip address
+    `192.168.43.1:8001` when connected to robot wifi.
     </Accordion>
 </Accordions>
