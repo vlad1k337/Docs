@@ -54,11 +54,10 @@ Replace or add this code as the Drawing class:
  *
  * @author Logan Nash
  * @author Anyi Lin - 10158 Scott's Bots
- * @version 1.0, 4/22/2024
- */ 
+ * @version 2.0, 11/03/2025
+ */
 class Drawing {
     public static final double ROBOT_RADIUS = 9;
-
     private static TelemetryPacket packet;
 
     /**
@@ -70,12 +69,11 @@ class Drawing {
     public static void drawDebug(Follower follower) {
         if (follower.getCurrentPath() != null) {
             drawPath(follower.getCurrentPath(), "#3F51B5");
-            Point closestPoint = follower.getPointFromPath(follower.getCurrentPath().getClosestPointTValue());
+            Pose closestPoint = follower.getPointFromPath(follower.getCurrentPath().getClosestPointTValue());
             drawRobot(new Pose(closestPoint.getX(), closestPoint.getY(), follower.getCurrentPath().getHeadingGoal(follower.getCurrentPath().getClosestPointTValue())), "#3F51B5");
         }
-        drawPoseHistory(follower.getDashboardPoseTracker(), "#4CAF50");
+        drawPoseHistory(follower.getPoseHistory(), "#4CAF50");
         drawRobot(follower.getPose(), "#4CAF50");
-
         sendPacket();
     }
 
@@ -88,7 +86,6 @@ class Drawing {
      */
     public static void drawRobot(Pose pose, String color) {
         if (packet == null) packet = new TelemetryPacket();
-
         packet.fieldOverlay().setStroke(color);
         Drawing.drawRobotOnCanvas(packet.fieldOverlay(), pose.copy());
     }
@@ -102,9 +99,8 @@ class Drawing {
      */
     public static void drawPath(Path path, String color) {
         if (packet == null) packet = new TelemetryPacket();
-
         packet.fieldOverlay().setStroke(color);
-        Drawing.drawPath(packet.fieldOverlay(), path.getDashboardDrawingPoints());
+        Drawing.drawPath(packet.fieldOverlay(), path.getPanelsDrawingPoints());
     }
 
     /**
@@ -127,9 +123,8 @@ class Drawing {
      * @param poseTracker the DashboardPoseTracker to get the pose history from
      * @param color the color to draw the pose history with
      */
-    public static void drawPoseHistory(DashboardPoseTracker poseTracker, String color) {
+    public static void drawPoseHistory(PoseHistory poseTracker, String color) {
         if (packet == null) packet = new TelemetryPacket();
-
         packet.fieldOverlay().setStroke(color);
         packet.fieldOverlay().strokePolyline(poseTracker.getXPositionsArray(), poseTracker.getYPositionsArray());
     }
@@ -149,22 +144,6 @@ class Drawing {
     }
 
     /**
-     * This draws a robot on the Dashboard at a specified Point.
-     *
-     * @param c the Canvas on the Dashboard on which this will draw
-     * @param t the Point to draw at
-     */
-    public static void drawRobotOnCanvas(Canvas c, Point t) {
-        c.setStrokeWidth(1);
-        c.strokeCircle(t.getX(), t.getY(), ROBOT_RADIUS);
-
-        Vector halfv = new Vector(0.5 * ROBOT_RADIUS, t.getTheta());
-        Vector p1 = MathFunctions.addVectors(halfv, new Vector(t.getR(), t.getTheta()));
-        Vector p2 = MathFunctions.addVectors(p1, halfv);
-        c.strokeLine(p1.getXComponent(), p1.getYComponent(), p2.getXComponent(), p2.getYComponent());
-    }
-
-    /**
      * This draws a robot on the Dashboard at a specified Pose. This is more useful for drawing the
      * actual robot, since the Pose contains the direction the robot is facing as well as its position.
      *
@@ -172,8 +151,12 @@ class Drawing {
      * @param t the Pose to draw at
      */
     public static void drawRobotOnCanvas(Canvas c, Pose t) {
+        if (t == null || Double.isNaN(t.getX()) || Double.isNaN(t.getY()) || Double.isNaN(t.getHeading())) {
+            return;
+        }
+
         c.strokeCircle(t.getX(), t.getY(), ROBOT_RADIUS);
-        Vector v = t.getHeadingVector();
+        Vector v = t.getHeadingAsUnitVector();
         v.setMagnitude(v.getMagnitude() * ROBOT_RADIUS);
         double x1 = t.getX() + v.getXComponent() / 2, y1 = t.getY() + v.getYComponent() / 2;
         double x2 = t.getX() + v.getXComponent(), y2 = t.getY() + v.getYComponent();
