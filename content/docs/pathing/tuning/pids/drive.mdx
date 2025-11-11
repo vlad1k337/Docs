@@ -12,7 +12,7 @@ description: The Drive PIDF manages acceleration and braking along a path, ensur
 
 <Callout title="Warning!" type="warning">
 - **Immediately after running the `Drive Tuner` Opmode, the robot will move straight back and forth 40 inches. Make sure you have enough space before running this opmode.** You can adjust the distance the robot drives back and forth through Panels.
-- **The robot WILL move laterally or change its heading. This is expected behavior, since the translational and heading PIDFs are not activated.** Consider using `Line Tuner` in `Manual` folder for initial tuning, and move back to `Drive Tuner` for more aggresive adjustments.
+- **The robot WILL move laterally and/or change its heading. This is expected behavior since the translational and heading PIDFs are not activated.** If both translational and heading PIDFs are tuned, consider using the `Line Tuner` to ensure the robot stays on the line.
 </Callout>
 
 ## Tuning Process
@@ -27,7 +27,7 @@ The BrakingStrength you set in the `Constants` class will be the default Braking
 2. Adjust the PIDF constants (`coefficientsDrivePIDF`) in the `Tuning`-> `Follower` -> `Constants` tab of Panels Configurables to ensure that the robot smoothly and accurately drives straight back and forth.
 
 <Callout title="Tuning Tips" type="info">
-  -  PedroPathing now no longer integrates heading and translational PIDF correction for drive tuning. If you would like to test all three of them, navigate yourself to the `Line Tuner` in the `Manual` folder.
+  -  PedroPathing now no longer activates heading and translational PIDF correction for drive tuning. If you would like to test all three of them, navigate yourself to the `Line Tuner` in the `Manual` folder. Use it to adjust `BreakingStrength`, path constraints and making sure all PIDFs are working well together.
   - Increasing your drive PIDF will make the robot move more quickly along the path, at the risk of more overshoot at the end of the path.
   - Decreasing your drive PIDF will make the robot move more slowly and reduce the overshoot at the end of the path.
   - Adjusting the `BrakingStrength` can significantly help manage how smoothly the robot decelerates as it reaches the end of its path.
