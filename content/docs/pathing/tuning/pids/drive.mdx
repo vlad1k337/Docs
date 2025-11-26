@@ -27,7 +27,7 @@ The BrakingStrength you set in the `Constants` class will be the default Braking
 2. Adjust the PIDF constants (`coefficientsDrivePIDF`) in the `Tuning`-> `Follower` -> `Constants` tab of Panels Configurables to ensure that the robot smoothly and accurately drives straight back and forth.
 
 <Callout title="Tuning Tips" type="info">
-  -  PedroPathing now no longer activates heading and translational PIDF correction for drive tuning. If you would like to test all three of them, navigate yourself to the `Line Tuner` in the `Manual` folder. Use it to adjust `BrakingStrength`, path constraints and making sure all PIDFs are working well together.
+  -  PedroPathing does not activate heading and translational PIDF correction for drive tuning. If you would like to test all three of them, navigate yourself to the `Line Tuner` in the `Manual` folder. Use it to adjust `BrakingStrength`, path constraints and making sure all PIDFs are working well together.
   - Increasing your drive PIDF will make the robot move more quickly along the path, at the risk of more overshoot at the end of the path.
   - Decreasing your drive PIDF will make the robot move more slowly and reduce the overshoot at the end of the path.
   - Adjusting the `BrakingStrength` can significantly help manage how smoothly the robot decelerates as it reaches the end of its path.
